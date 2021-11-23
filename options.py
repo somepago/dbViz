@@ -20,6 +20,7 @@ def options():
     parser.add_argument('--save_net', type=str, default=None)
     parser.add_argument('--train_mode', type=str, default='naive')
     parser.add_argument('--opt', type=str, default='SGD')
+    parser.add_argument('--sam_radius', type=float)
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--bs', default=128 , type=int)
 

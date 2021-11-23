@@ -109,7 +109,7 @@ if args.load_net is None:
         planeloader = make_planeloader(images, args)
         print(len(planeloader))
     for epoch in range(args.epochs):
-        train_acc = train(args, net, trainloader, optimizer, criterion, device, args.train_mode)
+        train_acc = train(args, net, trainloader, optimizer, criterion, device, args.train_mode, sam_radius=args.sam_radius)
         if args.plot_animation:
             test_acc, predicted = test(args, net, testloader, device, epoch,images,labels,planeloader)
         else:

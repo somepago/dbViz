@@ -11,11 +11,14 @@ from model import get_teacher_model
 
 # Training
 
-def train(args, net, trainloader, optimizer, criterion, device, mode):
-    acc = eval(f"train_{mode}")(args, net, trainloader, optimizer, criterion, device)
+def train(args, net, trainloader, optimizer, criterion, device, mode, sam_radius=False):
+    if mode == "naive":
+        acc = eval(f"train_{mode}")(args, net, trainloader, optimizer, criterion, device, sam_radius=False)
+    else:
+        acc = eval(f"train_{mode}")(args, net, trainloader, optimizer, criterion, device)
     return acc
 
-def train_naive(args, net, trainloader, optimizer, criterion, device):
+def train_naive(args, net, trainloader, optimizer, criterion, device, sam_radius=False):
     net.train()
     train_loss = 0
     correct = 0
@@ -26,6 +29,19 @@ def train_naive(args, net, trainloader, optimizer, criterion, device):
         outputs = net(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
+        if sam_radius:
+            with torch.no_grad():
+                norm_factor = 0
+                perturb_dict = {}
+                for name, para in net.named_parameters():
+                    norm_factor += (para.grad ** 2).sum()
+                for name, para in net.named_parameters():
+                    para.data += para.grad / norm_factor * sam_radius
+                    perturb_dict[name] = para.grad / norm_factor * sam_radius
+            optimizer.zero_grad()
+            outputs = net(inputs)
+            loss = criterion(outputs, targets)
+            loss.backward()
         optimizer.step()
 
         train_loss += loss.item()
