@@ -128,7 +128,6 @@ if args.load_net is None:
             print(f'The best epoch is: {epoch}')
             os.makedirs(f'saved_models/{args.train_mode}/{str(args.set_seed)}', exist_ok=True)
             if args.extra_path != None:
-                save_path = f'/cmlscratch/lfowl/decision_bound/saved_models/{args.train_mode}/{str(args.set_seed)}/{args.extra_path}'
                 os.makedirs(save_path, exist_ok=True)
                 print(f'{save_path}/{args.save_net}.pth')
                 if torch.cuda.device_count() > 1:
