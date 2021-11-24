@@ -8,6 +8,7 @@ import argparse
 from model import get_model
 from data import get_data, make_planeloader
 from utils import get_loss_function, get_scheduler, get_random_images, produce_plot, get_noisy_images, AttackPGD
+from evaluation import decision_boundary
 from options import options
 from utils import simple_lapsed_time
 
@@ -39,24 +40,27 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 torch.manual_seed(args.set_data_seed)
 trainloader, testloader = get_data(args)
 
-os.makedirs(args.load_net + '/predictions', exist_ok=True)
 paths = [os.path.join(args.load_net, p) for p in os.listdir(args.load_net) if 'pred' not in p]
 
 for path in paths:
-    if 'wide' in  path.lower():
-        args.net = 'WideResNet'
-        # Here the net path is saved like '/path/to/saved/models/WideResNet_10.pth'
-        args.widen_factor = int(path.split('/')[-1].split('.')[0].split('_')[1])
-    else:
-        args.net = path.split('/')[-1].split('.')[0]
-    net = get_model(args, device)
-    net.load_state_dict(torch.load(path))
-    pred_arr = []
-    for run in range(args.epochs):
-        random.seed(a=(args.set_data_seed+run), version=2)
-        images, labels, image_ids = get_random_images(testloader.dataset)
-        planeloader = make_planeloader(images, args)
-        preds = decision_boundary(args, net, planeloader, device)
-        pred_arr.append(torch.stack(preds).argmax(1).cpu())
-    torch.save(pred_arr, args.load_net + '/predictions/' + path.split('/')[-1].split('.pth')[0] + '_preds.pth')
+    os.makedirs(os.path.join(args.load_net, path, 'predictions'), exist_ok=True)
+    for p in sorted(os.listdir(path)):
+        if 'pred' not in p:
+            if 'wide' in  path.lower():
+                args.net = 'WideResNet'
+                # Here the net path is saved like '/path/to/saved/models/WideResNet_10.pth'
+                args.widen_factor = int(path.split('/')[-1].split('.')[0].split('_')[1])
+            else:
+                args.net = path.split('/')[-1].split('.')[0]
+            net = get_model(args, device)
+            temp_path = os.path.join(path,p)
+            net.load_state_dict(torch.load(temp_path))
+            pred_arr = []
+            for run in range(args.epochs):
+                random.seed(a=(args.set_data_seed+run), version=2)
+                images, labels, image_ids = get_random_images(testloader.dataset)
+                planeloader = make_planeloader(images, args)
+                preds = decision_boundary(args, net, planeloader, device)
+                pred_arr.append(torch.stack(preds).argmax(1).cpu())
+            torch.save(pred_arr, os.path.join(args.load_net, path, 'predictions') + '/' + temp_path.split('/')[-1].split('.pth')[0] + '_preds.pth')
             

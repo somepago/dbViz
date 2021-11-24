@@ -2,6 +2,7 @@
 import torch
 import random
 
+from options import options
 import os
 import argparse
 
@@ -40,12 +41,21 @@ args.load_net = /path/to/networks/
 '''
  
 # Get paths
-groups = [[os.path.join(args.load_net, p, q) for q in sorted(os.listdir(os.path.join(args.load_net, p)] for p in sorted(os.listdir(args.load_net)) if 'predictions' in p]
-iou_mat = torch.zeros((len(groups, len(groups))))
-total_mat = torch.zeros((len(net_dict), len(net_dict)))
+groups = []
+for p in sorted(os.listdir(args.load_net)):
+    for q in sorted(os.listdir(os.path.join(args.load_net, p))):
+        group_paths = []
+        if 'prediction' in q:
+            for s in sorted(os.listdir(os.path.join(args.load_net, p, q))):
+                group_paths.append(os.path.join(args.load_net, p, q, s))
+            groups.append(group_paths)
+
+#groups = [[os.path.join(args.load_net, p, q) for q in sorted(os.listdir(os.path.join(args.load_net, p)))] for p in sorted(os.listdir(args.load_net)) if 'predictions' in p]
+iou_mat = torch.zeros((len(groups), len(groups)))
+total_mat = torch.zeros((len(groups), len(groups)))
 # Now, iterate over the groups of paths
 for i, g1 in enumerate(groups):
-    for j, g2 in enumerate(groups[i:]): # We only need to calculate the upper right triangle 
+    for j, g2 in enumerate(groups): 
         for p1 in g1:
             for p2 in g2: 
                 if p1 == p2:
