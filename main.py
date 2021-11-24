@@ -27,7 +27,7 @@ print(args)
 #torch.manual_seed(args.set_seed)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
+save_path = args.save_net
 if args.active_log:
     import wandb
     idt = '_'.join(list(map(str,args.imgs)))

@@ -24,7 +24,7 @@ conda install -c conda-forge wandb
 
 We provide wide variety of models, please see models folder to see the exhasutive list. Train the model with following command.
 ```
-python main.py --net <model_name> --set_seed <init_seed> --save_net <model_save_location> --imgs 500,5000,1600 --resolution 500 --active_log --epochs <number_epochs> --lr <suitable_learningrate>
+python main.py --net <model_name> --set_seed <init_seed> --save_net <model_save_path> --imgs 500,5000,1600 --resolution 500 --active_log --epochs <number_epochs> --lr <suitable_learningrate>
 ```
 
 
