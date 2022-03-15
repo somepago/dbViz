@@ -3,6 +3,7 @@ To appear in CVPR 2022.
 
 <span style="color:blue">Repo is WIP, will add clear instructions to reproduce results by end of March.</span>
 
+![alt text](db_repro_allmodels.png "Repro plot")
 
 
 ## Requirements
