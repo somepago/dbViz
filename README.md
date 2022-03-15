@@ -1,7 +1,9 @@
 # Can Neural Nets Learn the Same Model Twice? Investigating Reproducibility and Double Descent from the Decision Boundary Perspective
 To appear in CVPR 2022. 
 
-## Repo is WIP, will have complete code with clear instructions by end of March.
+<span style="color:blue">Repo is WIP, will add clear instructions to reproduce results by end of March.</span>
+
+
 
 ## Requirements
 
