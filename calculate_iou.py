@@ -32,7 +32,7 @@ args.load_net = /path/to/networks/
         /predictions/
             /net2_preds1.pth
             /net2_preds2.pth
-            /net3_preds3.pth
+            /net2_preds3.pth
 
     .
     .
