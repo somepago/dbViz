@@ -3,7 +3,7 @@ To appear in CVPR 2022.
 
 <span style="color:blue">Repo is WIP, will add complete set of instructions by end of April.</span>
 
-![alt text](db_repro_allmodels.jpg "Repro plot")
+![alt text](db_repro_allmodels.jpg "Decision boundaries generated over different initialization seeds for multiple architectures")
 
 
 ## Requirements
