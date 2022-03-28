@@ -1,7 +1,7 @@
 # Can Neural Nets Learn the Same Model Twice? Investigating Reproducibility and Double Descent from the Decision Boundary Perspective
 To appear in CVPR 2022. 
 
-<span style="color:blue">Repo is WIP, will add complete set of instructions to replicate results by end of March.</span>
+<span style="color:blue">Repo is WIP, will add complete set of instructions by end of April.</span>
 
 ![alt text](db_repro_allmodels.jpg "Repro plot")
 
@@ -49,6 +49,11 @@ python calculate_iou.py --load_net /path/to/your/saved/models
 ```
 
 These two scripts also contain more information about the structure of saved models that is needed. 
+
+To recreate the plots from the paper, first train each architecture atleast 3 times with different initilaization seed (like 0,1,2). Then run the following bash file.
+```
+bash script_plots.sh
+```
 
 ## Double Descent experiments
 To reproduce double descent experiments, please refer to the README file in the double-descent folder.
