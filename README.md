@@ -57,3 +57,24 @@ bash script_plots.sh
 
 ## Double Descent experiments
 To reproduce double descent experiments, please refer to the README file in the double-descent folder.
+
+## Acknowledgements
+
+We would like to thank the following public repos from which we borrowed model training utilites.
+- https://github.com/kuangliu/pytorch-cifar
+- https://github.com/lucidrains/vit-pytorch
+
+## License
+This repository is released under the Apache 2.0 license as found in the [LICENSE](LICENSE) file.
+
+## Cite us
+
+```
+@article{somepalli2022can,
+  title={Can Neural Nets Learn the Same Model Twice? Investigating Reproducibility and Double Descent from the Decision Boundary Perspective},
+  author={Somepalli, Gowthami and Fowl, Liam and Bansal, Arpit and Yeh-Chiang, Ping and Dar, Yehuda and Baraniuk, Richard and Goldblum, Micah and Goldstein, Tom},
+  journal={arXiv preprint arXiv:2203.08124},
+  year={2022}
+}
+
+```
