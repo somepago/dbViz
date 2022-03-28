@@ -24,7 +24,6 @@ from utils import simple_lapsed_time
 
 args = options().parse_args()
 print(args)
-#torch.manual_seed(args.set_seed)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 save_path = args.save_net
@@ -40,7 +39,6 @@ trainloader, testloader = get_data(args)
 torch.manual_seed(args.set_seed)
 test_accs = []
 train_accs = []
-# import ipdb; ipdb.set_trace()
 net = get_model(args, device)
 
 test_acc, predicted = test(args, net, testloader, device, 0)
@@ -136,15 +134,6 @@ if args.load_net is None:
                     state_dict = net.state_dict()
                 torch.save(state_dict, f'{save_path}/{args.save_net}.pth')
                 
-                '''
-                os.makedirs(f'saved_models/{args.train_mode}/{str(args.set_seed)}/{args.extra_path}', exist_ok=True)
-                print(f'saved_models/{args.train_mode}/{str(args.set_seed)}/{args.extra_path}/{args.save_net}.pth')
-                if torch.cuda.device_count() > 1:
-                    torch.save(net.module.state_dict(),
-                               f'saved_models/{args.train_mode}/{str(args.set_seed)}/{args.extra_path}/{args.save_net}.pth')
-                else:
-                    torch.save(net.state_dict(), f'saved_models/{args.train_mode}/{str(args.set_seed)}/{args.extra_path}/{args.save_net}.pth')
-                '''
             else:
                 print(f'saved_models/{args.train_mode}/{str(args.set_seed)}/{args.save_net}.pth')
                 if torch.cuda.device_count() > 1:

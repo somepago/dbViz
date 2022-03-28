@@ -377,7 +377,7 @@ def produce_plot_x(path, preds, planeloader, images, labels, trainloader, title=
     plt.close(fig)
     return
 
-def produce_plot_sepleg(path, preds, planeloader, images, labels, trainloader, title='best', temp=1.0,true_labels = None):
+def produce_plot_sepleg(path, preds, planeloader, images, labels, trainloader, title='best', temp=0.01,true_labels = None):
     import seaborn as sns
     sns.set_style("whitegrid")
     paper_rc = {'lines.linewidth': 1, 'lines.markersize': 15,}                  
@@ -385,12 +385,14 @@ def produce_plot_sepleg(path, preds, planeloader, images, labels, trainloader, t
     plt.rc("font", family="Times New Roman")
     from matplotlib import cm
     from matplotlib.colors import LinearSegmentedColormap
-    col_map = cm.get_cmap('tab10')
+    col_map = cm.get_cmap('gist_rainbow')
     cmaplist = [col_map(i) for i in range(col_map.N)]
     classes = ['AIRPL', 'AUTO', 'BIRD', 'CAT', 'DEER',
                    'DOG', 'FROG', 'HORSE', 'SHIP', 'TRUCK']
+    cmaplist = [cmaplist[45],cmaplist[30],cmaplist[170],cmaplist[150],cmaplist[65],cmaplist[245],cmaplist[0],cmaplist[220],cmaplist[180],cmaplist[90]]
+    cmaplist[2] = (0.17254901960784313, 0.6274509803921569, 0.17254901960784313, 1.0)
+    cmaplist[4] = (0.6509803921568628, 0.33725490196078434, 0.1568627450980392, 1.0)
 
-    cmaplist = cmaplist[:len(classes)]
     col_map = LinearSegmentedColormap.from_list('custom_colormap', cmaplist, N=len(classes))
     fig, ax1  = plt.subplots()
 
@@ -404,15 +406,13 @@ def produce_plot_sepleg(path, preds, planeloader, images, labels, trainloader, t
     label_color_dict = dict(zip([*range(10)], cmaplist))
 
     color_idx = [label_color_dict[label] for label in class_pred]
-    scatter = ax1.scatter(x, y, c=color_idx, alpha=val, s=0.1)
+    scatter = ax1.scatter(x, y, c=color_idx, alpha=0.5, s=0.1)
     markers = [plt.Line2D([0,0],[0,0],color=color, marker='o', linestyle='') for color in label_color_dict.values()]
-    # legend1 = plt.legend(markers, classes, numpoints=1,bbox_to_anchor=(1.01, 1))
-    # ax1.add_artist(legend1)
+
     coords = planeloader.dataset.coords
 
     dm = torch.tensor(trainloader.dataset.transform.transforms[-1].mean)[:, None, None]
     ds = torch.tensor(trainloader.dataset.transform.transforms[-1].std)[:, None, None]
-    # import ipdb; ipdb.set_trace()
     markerd = {
         0: 'o',
         1 : '^',
@@ -421,9 +421,6 @@ def produce_plot_sepleg(path, preds, planeloader, images, labels, trainloader, t
     for i, image in enumerate(images):
         coord = coords[i]
         plt.scatter(coord[0], coord[1], s=150, c='black', marker=markerd[i])
-    # red_patch = mpatches.Patch(color =cmaplist[labels[0]] , label=f'{classes[labels[0]]}')
-    # blue_patch = mpatches.Patch(color =cmaplist[labels[1]], label=f'{classes[labels[1]]}')
-    # green_patch = mpatches.Patch(color =cmaplist[labels[2]], label=f'{classes[labels[2]]}')
 
     labelinfo = {
         'labels' : [classes[i] for i in labels]
@@ -440,19 +437,11 @@ def produce_plot_sepleg(path, preds, planeloader, images, labels, trainloader, t
     ax = plt.gca()
     ax.axes.xaxis.set_visible(False)
     ax.axes.yaxis.set_visible(False)    
-    # ax1.get_legend().remove()
-    # fig.tight_layout()
-    # plt.gca().set_axis_off()
-    # plt.subplots_adjust(top = 1.2, bottom = 0, right = 1, left = 0, 
-    #             hspace = 0, wspace = 0)
+
     plt.margins(0,0)
-    # plt.gca().xaxis.set_major_locator(plt.NullLocator())
-    # plt.gca().yaxis.set_major_locator(plt.NullLocator())
     if path is not None:
         img_dir = '/'.join([p for p in (path.split('/'))[:-1]])
         os.makedirs(img_dir, exist_ok=True)
-        pickle.dump( labelinfo, open(f"{path}_labelinfo.p", "wb" ) )
-        #os.makedirs(path.split, exist_ok=True)
         plt.savefig(f'{path}_x.png', bbox_inches='tight')
 
 
